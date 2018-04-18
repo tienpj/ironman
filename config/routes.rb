@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   get '/kamigo/response_headers', to: 'kamigo#response_headers'
   get '/kamigo/response_body', to: 'kamigo#show_response_body'
   get '/kamigo/sent_request', to: 'kamigo#sent_request'
+  post '/kamigo/webhook', to: 'kamigo#webhook'
 end 
 # test
