@@ -1,6 +1,9 @@
 class KamigoController < ApplicationController
     require 'net/http'
+    require 'line/bot'
+
     protect_from_forgery with: :null_session
+
     def eat
         render plain: "吃土啦"
     end
@@ -40,8 +43,27 @@ class KamigoController < ApplicationController
         "#{message}油~"
     end
 
-    def webhook
-        head :ok
-    end 
+def webhook
+  # Line Bot API 物件初始化
+  client = Line::Bot::Client.new { |config|
+    config.channel_secret = '065b1de35a66ec925b11e1e0e3ad7bc9'
+    config.channel_token = 'eOuNxFw6m7HNy7MraHrC7Grogw4zjas2Jsn1DTx1SXN1RV0+XblGl+U5KuRgyCm8Fp+HmDm3ceTBuU3ow90FT3nW1XMWhqwEdAWll21hO1a4Y5qFt0F/qguZemhUMyOoUnse+Nj2WYvJG4rKYcbDlQdB04t89/1O/w1cDnyilFU='
+  }
+  
+  # 取得 reply token
+  reply_token = params['events'][0]['replyToken']
+
+  # 設定回覆訊息
+  message = {
+    type: 'text',
+    text: '好哦～好哦～'
+  }
+
+  # 傳送訊息
+  response = client.reply_message(reply_token, message)
+    
+  # 回應 200
+  head :ok
+end 
 
 end
