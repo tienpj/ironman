@@ -42,28 +42,59 @@ class KamigoController < ApplicationController
     def translate_to_korean(message)
         "#{message}油~"
     end
-
-def webhook
-  # Line Bot API 物件初始化
-  client = Line::Bot::Client.new { |config|
-    config.channel_secret = '065b1de35a66ec925b11e1e0e3ad7bc9'
-    config.channel_token = 'eOuNxFw6m7HNy7MraHrC7Grogw4zjas2Jsn1DTx1SXN1RV0+XblGl+U5KuRgyCm8Fp+HmDm3ceTBuU3ow90FT3nW1XMWhqwEdAWll21hO1a4Y5qFt0F/qguZemhUMyOoUnse+Nj2WYvJG4rKYcbDlQdB04t89/1O/w1cDnyilFU='
-  }
-  
-  # 取得 reply token
-  reply_token = params['events'][0]['replyToken']
-
-  # 設定回覆訊息
-  message = {
-    type: 'text',
-    text: '好哦～好哦～'
-  }
-
-  # 傳送訊息
-  response = client.reply_message(reply_token, message)
     
-  # 回應 200
-  head :ok
-end 
+    def line
+        # Line Bot API 物件初始化
+        @line ||= Line::Bot::Client.new { |config|
+        config.channel_secret = '065b1de35a66ec925b11e1e0e3ad7bc9'
+        config.channel_token = 'eOuNxFw6m7HNy7MraHrC7Grogw4zjas2Jsn1DTx1SXN1RV0+XblGl+U5KuRgyCm8Fp+HmDm3ceTBuU3ow90FT3nW1XMWhqwEdAWll21hO1a4Y5qFt0F/qguZemhUMyOoUnse+Nj2WYvJG4rKYcbDlQdB04t89/1O/w1cDnyilFU='
+        }
+    end
 
+    def webhook
+        # 設定回覆文字
+        reply_text = keyword_reply(received_text)
+    
+        # 傳送訊息到 line
+        response = reply_to_line(reply_text)
+        
+        # 回應 200
+        head :ok
+    end 
+    
+      # 取得對方說的話
+    def received_text
+        message = params['events'][0]['message']
+        message['text'] unless message.nil?
+    end
+    
+      # 關鍵字回覆
+    def keyword_reply(received_text)
+        # 學習紀錄表
+        keyword_mapping = {
+          'QQ' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s',
+          '我難過' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s'
+        }
+        
+        # 查表
+        keyword_mapping[received_text]
+    end
+    
+      # 傳送訊息到 line
+    def reply_to_line(reply_text)
+        return nil if reply_text.nil?
+        
+        # 取得 reply token
+        reply_token = params['events'][0]['replyToken']
+        
+        # 設定回覆訊息
+        message = {
+          type: 'text',
+          text: reply_text
+        } 
+
+        # 傳送訊息
+        line.reply_message(reply_token, message)
+    end
+    
 end
