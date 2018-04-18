@@ -7,3 +7,4 @@ Rails.application.routes.draw do
   get '/kamigo/response_body', to: 'kamigo#show_response_body'
   get '/kamigo/sent_request', to: 'kamigo#sent_request'
 end 
+# test
