@@ -73,7 +73,9 @@ class KamigoController < ApplicationController
         # 學習紀錄表
         keyword_mapping = {
           'QQ' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s',
-          '我難過' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s'
+          '我難過' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s',
+          'BB' =>'https://www.youtube.com/watch?v=EURj64CXyH4&feature=youtu.be&t=12m07s',
+          'TPJ' =>'87'
         }
         
         # 查表
@@ -96,5 +98,5 @@ class KamigoController < ApplicationController
         # 傳送訊息
         line.reply_message(reply_token, message)
     end
-    
+
 end
