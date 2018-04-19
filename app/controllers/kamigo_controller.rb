@@ -57,10 +57,10 @@ class KamigoController < ApplicationController
 
         # 關鍵字回覆
         reply_text = keyword_reply(received_text) if reply_text.nil?
-
+    
         # 傳送訊息到 line
         response = reply_to_line(reply_text)
-
+        
         # 回應 200
         head :ok
     end 
@@ -73,20 +73,20 @@ class KamigoController < ApplicationController
 
     # 學說話
     def learn(received_text)
-    #如果開頭不是 卡米狗學說話; 就跳出
-    return nil unless received_text[0..6] == '卡米狗學說話;'
+        #如果開頭不是 卡米狗學說話; 就跳出
+        return nil unless received_text[0..6] == '卡米狗學說話;'
     
-    received_text = received_text[7..-1]
-    semicolon_index = received_text.index(';')
+        received_text = received_text[7..-1]
+        semicolon_index = received_text.index(';')
 
-    # 找不到分號就跳出
-    return nil if semicolon_index.nil?
+        # 找不到分號就跳出
+        return nil if semicolon_index.nil?
 
-    keyword = received_text[0..semicolon_index-1]
-    message = received_text[semicolon_index+1..-1]
+        keyword = received_text[0..semicolon_index-1]
+        message = received_text[semicolon_index+1..-1]
 
-    KeywordMapping.create(keyword: keyword, message: message)
-    '好哦～好哦～'
+        KeywordMapping.create(keyword: keyword, message: message)
+        '好哦～好哦～'
     end
 
     # 關鍵字回覆
